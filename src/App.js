@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import {
+  Route,
+  Routes,
+} from "react-router-dom";
+import { PUBLIC_ROUTES } from "./router";
+import { Suspense } from "react"
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-content">
+      <Suspense>
+        <Routes>
+          {PUBLIC_ROUTES.map((route, index) =>
+            route.component ? (
+              <Route
+                key={index}
+                path={route.path}
+                exact={route.exact}
+                element={<route.component />}
+              />
+            ) : null
+          )}
+        </Routes>
+      </Suspense>
     </div>
   );
 }

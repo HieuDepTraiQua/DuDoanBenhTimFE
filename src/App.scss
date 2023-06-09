@@ -1,0 +1,109 @@
+// @font-face {
+//   font-family: 'Geologica';
+//   src: url('https://fonts.googleapis.com/css2?family=Geologica&display=swap') format('truetype');
+// }
+
+@import url('https://fonts.googleapis.com/css2?family=Geologica&display=swap');
+
+* {
+  font-family: "Geologica";
+  color: #423e3e;
+}
+
+.container {
+  width: 99%;
+  position: relative;
+}
+
+.bg-image {
+  object-fit: fill;
+  position: absolute;
+  object-fit: fill;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+}
+
+.title {
+  font-size: 40px;
+  position: absolute;
+  text-align: center;
+  margin: 40px 0 20px 0;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 99%;
+}
+
+.content-items {
+  display: flex;
+  justify-content: center;
+}
+
+.item-list {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0 80px;
+}
+
+.item {
+  border: 7px #423e3e solid;
+  width: 272px;
+  height: 400px;
+  border-radius: 20px;
+  position: absolute;
+  display: flex;
+  text-align: center;
+  margin-top: 175px;
+  padding: 20px;
+  letter-spacing: 3px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.item-title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+.item-title-2 {
+  font-size: 60px;
+  font-weight: 900;
+}
+
+.line {
+  border: 3px #423e3e solid;
+  width: 60%;
+  margin: 20px 0;
+}
+
+.item-icon {
+  width: 40%;
+}
+
+.item-button {
+  border: 3px solid #423e3e;
+  width: 50%;
+  height: 42px;
+  font-size: 25px;
+  text-align: center;
+  color: white;
+  background-color: #423e3e;
+  font-weight: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.ant-select-selector {
+  width: 650px;
+  height: 50px;
+  display: flex;
+  padding: 0 11px;
+  align-items: center;
+}
