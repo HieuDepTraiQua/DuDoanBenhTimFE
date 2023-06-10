@@ -130,7 +130,7 @@ export default function Index() {
   return (
     <div className="container">
       <img className="bg-image" src={require("../../assest/bg.png")} alt="" />
-      <div className="title">SỬ DỤNG CNN</div>
+      <div className="title">CHUẨN ĐOÁN BỆNH</div>
       {displayInfo && (
         <div className="user-info">
           <div className="content">

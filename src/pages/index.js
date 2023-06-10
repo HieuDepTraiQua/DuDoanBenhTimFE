@@ -24,9 +24,9 @@ export default function Index() {
         <div className="content-items">
           <div className="item">
             <div className="item-title">Sử dụng</div>
-            <div className="item-title-2">CNN</div>
+            <div className="item-title-2">KNN</div>
             <div className="line"></div>
-            <img className="item-icon" src={require("../assest/cnn.png")} alt="" />
+            <img className="item-icon" src={require("../assest/knn.png")} alt="" />
             <div className="item-button" onClick={redirectToCnn}>Chọn</div>
           </div>
         </div>
