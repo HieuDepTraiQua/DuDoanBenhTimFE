@@ -1,0 +1,75 @@
+* {
+  font-family: "Geologica";
+  color: #423e3e;
+}
+
+.container {
+  width: 99%;
+  position: relative;
+  .bg-image {
+    object-fit: fill;
+    position: absolute;
+    object-fit: fill;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+  }
+  .title {
+    font-size: 40px;
+    position: absolute;
+    text-align: center;
+    margin: 40px 0 20px 0;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 99%;
+  }
+  .return-button {
+    font-size: 30px;
+    position: absolute;
+    margin: 40px;
+    cursor: pointer;
+  }
+  .table-content {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: 860px;
+    align-items: center;
+    .table-data {
+      width: 1400px;
+      background-color: white;
+      padding: 10px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      border-radius: 5px;
+    }
+  }
+  .header {
+    position: absolute;
+    display: flex;
+    width: 1200;
+    justify-content: flex-end;
+    width: 1360px;
+    height: 152px;
+    align-items: flex-end;
+    .add-button {
+        color: white;
+        background-color: #423e3e;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        width: 100px;
+        justify-content: center;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+  }
+}
+
+.ant-form-item .ant-form-item-control-input-content{
+    width: 700px;
+    display: flex;
+    justify-content: flex-end;
+  }

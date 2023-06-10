@@ -69,7 +69,7 @@
 }
 
 .item-title-2 {
-  font-size: 60px;
+  font-size: 45px;
   font-weight: 900;
 }
 
@@ -107,3 +107,23 @@
   padding: 0 11px;
   align-items: center;
 }
+
+.ant-btn-primary{
+  background-color: #423e3e;
+  span{
+    color: white;
+  }
+}
+
+:where(.css-dev-only-do-not-override-12jzuas).ant-btn-primary:not(:disabled):hover{
+  background-color: white;
+  border: 2px solid #423e3e;
+  span{
+    color: #423e3e;
+    font-weight: 600;
+  }
+}
+
+.modal-create{
+  display: flex;
+  }

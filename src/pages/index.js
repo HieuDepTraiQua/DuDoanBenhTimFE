@@ -6,8 +6,12 @@ import { useNavigate } from "react-router-dom";
 export default function Index() {
   const navigate = useNavigate();
 
-  const redirectToCnn = () => {
-    navigate(`/cnn`);
+  const redirectToPredict = () => {
+    navigate(`/predict`);
+  }
+
+  const redirectToPatient = () => {
+    navigate(`/patient`);
   }
 
   useEffect(() => {}, []);
@@ -19,15 +23,24 @@ export default function Index() {
         src={require("../assest/bg.png")}
         alt=""
       />
-      <div className="title">CHUẨN ĐOÁN BỆNH TIM</div>
+      <div className="title">HEALTH CARE</div>
       <div className="item-list">
         <div className="content-items">
           <div className="item">
-            <div className="item-title">Sử dụng</div>
-            <div className="item-title-2">KNN</div>
+            <div className="item-title">Thông tin</div>
+            <div className="item-title-2">Bệnh nhân</div>
             <div className="line"></div>
-            <img className="item-icon" src={require("../assest/knn.png")} alt="" />
-            <div className="item-button" onClick={redirectToCnn}>Chọn</div>
+            <img className="item-icon" src={require("../assest/b.png")} alt="" />
+            <div className="item-button" onClick={redirectToPatient}>Chọn</div>
+          </div>
+        </div>
+        <div className="content-items">
+          <div className="item">
+            <div className="item-title">Chuẩn đoán</div>
+            <div className="item-title-2">Bệnh</div>
+            <div className="line"></div>
+            <img className="item-icon" src={require("../assest/p.png")} alt="" />
+            <div className="item-button" onClick={redirectToPredict}>Chọn</div>
           </div>
         </div>
       </div>

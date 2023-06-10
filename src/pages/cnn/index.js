@@ -32,9 +32,7 @@ export default function Index() {
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -57,32 +55,51 @@ export default function Index() {
   };
 
   const predict = () => {
-    const { patientId, firstName, lastName, fullName, sex, age, ...newData } =
-      dataDetail;
-    axios.post(`http://localhost:8000/patient`, newData, {}).then((res) => {
-      setResult(res.data);
-      showModal();
-    });
+    const {
+      patientId,
+      firstName,
+      lastName,
+      fullName,
+      cpName,
+      fbsName,
+      exangName,
+      restecgName,
+      sex,
+      target,
+      targetName,
+      ...newData
+    } = dataDetail;
+    newData.sex = 1;
+    axios
+      .post(`http://localhost:8000/patient/forecast`, newData, {})
+      .then((res) => {
+        setResult(res.data);
+        showModal();
+      });
   };
 
+  const lamTronSo = (value) => {
+    return value.toFixed(2)
+  }
+
   const converrtTextDauNguc = (value) => {
-    if (value === 0) {
+    if (value === 1) {
       return "Đau thắt ngực điển hình";
-    } else if (value === 1) {
-      return "Đau thắt ngực không điển hình";
     } else if (value === 2) {
-      return "Không đau thắt ngực";
+      return "Đau thắt ngực không điển hình";
     } else if (value === 3) {
+      return "Không đau thắt ngực";
+    } else if (value === 4) {
       return "Không có triệu chứng";
     } else return "Không có triệu chứng";
   };
 
   const converrtTextDuongHuyet = (value) => {
     if (value === 0) {
-      return "< 120 mg/Dl";
+      return "Nhỏ hơn 120 mg/Dl";
     } else if (value === 1) {
-      return "> 120 mg/Dl";
-    } else return "< 120 mg/Dl";
+      return "Lớn hơn 120 mg/Dl";
+    } else return "Nhỏ hơn 120 mg/Dl";
   };
 
   const converrtTextDienTamDo = (value) => {
@@ -104,13 +121,13 @@ export default function Index() {
   };
 
   const converrtTextDoDoc = (value) => {
-    if (value === 0) {
-      return "Dốc lên";
-    } else if (value === 1) {
-      return "Dốc thẳng";
+    if (value === 1) {
+      return "Tăng dần";
     } else if (value === 2) {
-      return "Dốc xuống";
-    } else return "Dốc lên";
+      return "Không đổi";
+    } else if (value === 3) {
+      return "Giảm dần";
+    } else return "Không đổi";
   };
 
   const converrtTextRoiLoanMau = (value) => {
@@ -170,18 +187,18 @@ export default function Index() {
                 </div>
                 <div className="items">
                   Mức cholesterol:{" "}
-                  <span className="description">{dataDetail.chol} mg/dL</span>
+                  <span className="description">{lamTronSo(dataDetail.chol)} mg/dL</span>
                 </div>
               </div>
               <div className="infomation">
                 <div className="items">
-                  Lượng đường trong máu:{" "}
+                  Mức đường huyết:{" "}
                   <span className="description">
                     {converrtTextDuongHuyet(dataDetail.fbs)}
                   </span>
                 </div>
                 <div className="items">
-                  Rối loạn máu:{" "}
+                  Loại bệnh tim:{" "}
                   <span className="description">
                     {converrtTextRoiLoanMau(dataDetail.thal)}
                   </span>
@@ -194,7 +211,7 @@ export default function Index() {
                 </div>
               </div>
               <div className="infomation">
-              <div className="items">
+                <div className="items">
                   Điện tâm đồ:{" "}
                   <span className="description">
                     {converrtTextDienTamDo(dataDetail.restecg)}
@@ -212,116 +229,27 @@ export default function Index() {
               </div>
               <div className="infomation">
                 <div className="items">
-                  Độ dốc:{" "}
+                  Độ dốc của phần giảm ST:{" "}
                   <span className="description">
                     {converrtTextDoDoc(dataDetail.slope)}
                   </span>
                 </div>
                 <div className="items">
-                  ST chênh xuống:{" "}
+                  Giá trị giảm ST:{" "}
                   <span className="description">{dataDetail.oldpeak}</span>
                 </div>
                 <div className="items"></div>
                 <div className="items"></div>
               </div>
-              {/* {/* <div className="infomation">
-                <Row gutter={80}>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Loại đau ngực:{" "}
-                      <span className="description">
-                        {converrtTextDauNguc(dataDetail.cp)}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Huyết áp:{" "}
-                      <span className="description">
-                        {dataDetail.trestbps} mm/Hg
-                      </span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Mức cholesterol:{" "}
-                      <span className="description">
-                        {dataDetail.chol} mg/dL
-                      </span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-              <div className="infomation">
-                <Row gutter={80}>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Điện tâm đồ:{" "}
-                      <span className="description">
-                        {converrtTextDienTamDo(dataDetail.restecg)}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Nhịp tim:{" "}
-                      <span className="description">{dataDetail.thalach}</span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Đau thắt ngực:{" "}
-                      <span className="description">
-                        {converrtTextDauThatNguc(dataDetail.exang)}
-                      </span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-              <div className="infomation">
-                <Row gutter={80}>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Lượng đường trong máu:{" "}
-                      <span className="description">
-                        {converrtTextDuongHuyet(dataDetail.fbs)}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Số lượng mạch chính:{" "}
-                      <span className="description">{dataDetail.ca}</span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Rối loạn máu:{" "}
-                      <span className="description">
-                        {converrtTextRoiLoanMau(dataDetail.thal)}
-                      </span>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
-              <div className="infomation">
-                <Row gutter={80}>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      Độ dốc:{" "}
-                      <span className="description">
-                        {converrtTextDoDoc(dataDetail.slope)}
-                      </span>
-                    </div>
-                  </Col>
-                  <Col className="gutter-row" span={8}>
-                    <div className="items">
-                      ST chênh xuống:{" "}
-                      <span className="description">{dataDetail.oldpeak}</span>
-                    </div>
-                  </Col>
-                </Row>*/}
-              </div> 
+            </div>
+          </div>
+        </div>
+      )}
+
+      {displayInfo && (
+        <div className="footer">
+          <div className="predict-button confirm-button" onClick={predict}>
+            Chuẩn đoán
           </div>
         </div>
       )}
@@ -345,13 +273,6 @@ export default function Index() {
           Xác nhận
         </div>
       </div>
-      {displayInfo && (
-        <div className="footer">
-          <div className="predict-button confirm-button" onClick={predict}>
-            Chuẩn đoán
-          </div>
-        </div>
-      )}
 
       <div className="return-button" onClick={redirectToHome}>
         {" "}
