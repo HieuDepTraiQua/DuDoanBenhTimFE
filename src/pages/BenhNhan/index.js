@@ -11,8 +11,11 @@ import {
   Input,
   Row,
   Col,
+  Select,
   Space,
 } from "antd";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Index() {
   const [listOfData, setListOfData] = useState([]);
@@ -22,12 +25,112 @@ export default function Index() {
   const [myForm] = Form.useForm();
   const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const currentData = listOfData.slice(startIndex, endIndex);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [titleModal, setTitleModal] = useState("");
+  const [selectedId, setSelectedId] = useState("");
 
+  // const [selectedOptionDauNguc, setSelectedOptionDaunguc] = useState("");
+  // const [selectedOptionDuongHuyet, setSelectedOptionDuongHuyet] = useState("");
+  // const [selectedOptionDienTamDo, setSelectedOptionDientamDo] = useState("");
+  // const [selectedOptionDauthatNguc, setSelectedOptionDauThatNguc] = useState("");
+  // const [selectedOptionDoDoc, setSelectedOptionDoDoc] = useState("");
+  // const [selectedOptionRoiLoanMau, setSelectedOptionRoiLoanMau] = useState("");
   const navigate = useNavigate();
+
+  const listDauNguc = [
+    {
+      value: "1",
+      label: "Đau thắt ngực điển hình",
+    },
+    {
+      value: "2",
+      label: "Đau thắt ngực không điển hình",
+    },
+    {
+      value: "3",
+      label: "Không đau thắt ngực",
+    },
+    {
+      value: "4",
+      label: "Không có triệu chứng",
+    },
+  ];
+  const listDuongHuyet = [
+    {
+      value: "0",
+      label: "Nhỏ hơn 120 mg/Dl",
+    },
+    {
+      value: "1",
+      label: "Lớn hơn 120 mg/Dl",
+    },
+  ];
+  const listDienTamDo = [
+    {
+      value: "0",
+      label: "Bình thường",
+    },
+    {
+      value: "1",
+      label: "Sóng ST-T bất thường",
+    },
+    {
+      value: "2",
+      label: "Phì đại tâm thất trái",
+    },
+  ];
+  const listDauThatnguc = [
+    {
+      value: "0",
+      label: "Không",
+    },
+    {
+      value: "1",
+      label: "Có",
+    },
+  ];
+  const listDoDoc = [
+    {
+      value: "3",
+      label: "Giảm dần",
+    },
+    {
+      value: "1",
+      label: "Tăng dần",
+    },
+    {
+      value: "2",
+      label: "Không đổi",
+    },
+  ];
+  const listLoaiMau = [
+    {
+      value: "0",
+      label: "Bình thường",
+    },
+    {
+      value: "1",
+      label: "Khiếm khuyết cố định",
+    },
+    {
+      value: "2",
+      label: "Khiếm khuyết có thể đảo ngược",
+    },
+  ];
+  const listGender = [
+    {
+      value: "0",
+      label: "Nữ",
+    },
+    {
+      value: "1",
+      label: "Nam",
+    },
+  ];
+
   const redirectToHome = () => {
     navigate(`/*`);
   };
@@ -43,12 +146,48 @@ export default function Index() {
     setPageSize(pageSize);
   };
 
-  const showModal = () => {
+  const showModal = (type) => {
     setIsModalOpen(true);
+    if (type === "update") {
+      setTitleModal("Cập nhật thông tin bệnh nhân");
+      setIsUpdate(true);
+    } else if (type === "create") {
+      setTitleModal("Thêm mới thông tin bệnh nhân");
+      myForm.resetFields();
+      setIsUpdate(false);
+    }
   };
 
-  const handleOk = () => {
+  const handleSubmit = (value) => {
     setIsModalOpen(false);
+    if (isUpdate){
+      const gender = value.sex;
+      if (gender === "Nam"){
+        value.sex = 1;
+      } else if (gender === "Nữ"){
+        value.sex = 0;
+      }
+      axios
+      .put(`http://localhost:8000/patient/${selectedId}`, value, {})
+      .then((res) => {
+        getListOfData();
+        toast.success("Cập nhật thành công!");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+    } else {
+      axios
+      .post(`http://localhost:8000/patient`, value, {})
+      .then((res) => {
+        getListOfData();
+        toast.success("Thêm mới thành công!");
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+    }
+    
   };
 
   const handleCancel = () => {
@@ -64,29 +203,44 @@ export default function Index() {
     setIsConfirmDeleteOpen(false);
   };
 
+  const handleEdit = (record) => {
+    myForm.setFieldsValue({
+      firstName: record.firstName,
+      lastName: record.lastName,
+      sex: record.sex,
+      age: record.age,
+      cp: record.cp,
+      trestbps: record.trestbps,
+      chol: record.chol,
+      fbs: record.fbs,
+      restecg: record.restecg,
+      thalach: record.thalach,
+      exang: record.exang,
+      oldpeak: record.oldpeak,
+      slope: record.slope,
+      ca: record.ca,
+      thal: record.thal,
+    });
+    setSelectedId(record.patientId);
+    showModal("update");
+  };
+
   const handleDelete = () => {
-    // axios
-    //   .delete(
-    //     `http://localhost:1234/api/thuvien/category/${selectedRecord.id}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     toast.success("Xóa thành công!");
-    //     getListOfData();
-    //   })
-    //   .catch((error) => {
-    //     toast.error(error.response.data.message);
-    //   });
+    axios
+      .delete(`http://localhost:8000/patient/${selectedRecord.patientId}`, {})
+      .then((res) => {
+        toast.success("Xóa thành công!");
+        getListOfData();
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
     setIsConfirmDeleteOpen(false);
   };
 
   const lamTronSo = (value) => {
-    return value.toFixed(2)
-  }
+    return value.toFixed(2);
+  };
 
   const converrtTextDauNguc = (value) => {
     if (value === 1) {
@@ -155,7 +309,7 @@ export default function Index() {
       title: "Họ và tên",
       dataIndex: "fullName",
       key: "fullName",
-      with: 100,
+      with: 200,
       fixed: "left",
     },
     {
@@ -176,35 +330,27 @@ export default function Index() {
       title: "Loại đau ngực",
       dataIndex: "cp",
       key: "cp",
-      width: 100,
       render: (value) => converrtTextDauNguc(value),
-
     },
     {
       title: "Huyết áp",
       dataIndex: "trestbps",
       key: "trestbps",
-      width: 100,
     },
     {
       title: "Mức cholesterol",
       dataIndex: "chol",
-      width: 100,
       key: "chol",
       render: (value) => lamTronSo(value),
-
     },
     {
       title: "Mức đường huyết",
-      width: 100,
       dataIndex: "fbs",
       key: "fbs",
       render: (value) => converrtTextDuongHuyet(value),
-
     },
     {
       title: "Điện tâm đồ",
-      width: 100,
       dataIndex: "restecg",
       key: "restecg",
       render: (value) => converrtTextDienTamDo(value),
@@ -212,58 +358,55 @@ export default function Index() {
     {
       title: "Đau thắt ngực",
       dataIndex: "exang",
-      width: 100,
       render: (value) => converrtTextDauThatNguc(value),
       key: "exang",
     },
     {
       title: "Giá trị giảm ST",
-      width: 100,
       dataIndex: "oldpeak",
       key: "oldpeak",
     },
     {
       title: "Độ dốc của phần giảm ST",
       dataIndex: "slope",
-      width: 100,
       key: "slope",
       render: (value) => converrtTextDoDoc(value),
     },
     {
       title: "Số lượng các mạch chính",
       dataIndex: "ca",
-      width: 100,
       key: "ca",
     },
     {
-      title: "Loại bệnh tim",
-      width: 100,
+      title: "Rối loạn máu",
       dataIndex: "thal",
       key: "thal",
       render: (value) => converrtTextRoiLoanMau(value),
     },
     {
       title: "Nhịp tim",
-      width: 100,
       dataIndex: "thalach",
       key: "thalach",
     },
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   fixed: "right",
-    //   width: 100,
-    //   render: (record) => (
-    //     <Space size="middle">
-    //       <div className="button-action">
-    //         <img src={require("../../assest//icon-edit.png")}></img>
-    //       </div>
-    //       <div className="button-action">
-    //         <img src={require("../../assest/icon-delete.png")}></img>
-    //       </div>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: "Action",
+      key: "action",
+      fixed: "right",
+      width: 100,
+      render: (record) => (
+        <Space size="middle">
+          <div className="button-action" onClick={() => handleEdit(record)}>
+            <img src={require("../../assest//icon-edit.png")}></img>
+          </div>
+          <div
+            className="button-action"
+            onClick={() => showDeleteConfirm(record)}
+          >
+            <img src={require("../../assest/icon-delete.png")}></img>
+          </div>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -274,7 +417,10 @@ export default function Index() {
         <div className="table-data">
           <Table
             columns={columns}
-            dataSource={currentData.map((data) => ({ ...data, key: data.id }))}
+            dataSource={currentData.map((data) => ({
+              ...data,
+              key: data.patientId,
+            }))}
             scroll={{
               x: 1300,
             }}
@@ -294,7 +440,7 @@ export default function Index() {
       </div>
 
       <Modal
-        title="Thêm mới bệnh nhân"
+        title={titleModal}
         open={isModalOpen}
         onCancel={handleCancel}
         width={800}
@@ -305,15 +451,15 @@ export default function Index() {
             layout="vertical"
             id="myForm"
             form={myForm}
-            onFinish={handleOk}
+            onFinish={handleSubmit}
             className="modal-input"
           >
             <Row gutter={20}>
               <Col span={12}>
                 <Form.Item
-                  label="Tên bệnh nhân"
+                  label="Họ"
                   required
-                  name="fullName"
+                  name="firstName"
                   rules={[
                     {
                       required: true,
@@ -321,7 +467,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập tên bệnh nhân" />
+                  <Input placeholder="Nhập họ của bệnh nhân" />
                 </Form.Item>
                 <Form.Item
                   label="Tuổi"
@@ -347,7 +493,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập thông số" />
+                  <Select options={listDauNguc} placeholder="Nhập dữ liệu" />
                 </Form.Item>
                 <Form.Item
                   label="Huyết áp"
@@ -386,7 +532,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập thông số" />
+                  <Select options={listDuongHuyet} placeholder="Nhập dữ liệu" />
                 </Form.Item>
                 <Form.Item
                   label="Điện tâm đồ"
@@ -399,10 +545,36 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập thông số" />
+                  <Select options={listDienTamDo} placeholder="Nhập dữ liệu" />
+                </Form.Item>
+                <Form.Item
+                  label="Rối loạn máu"
+                  required
+                  name="thal"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Trường bắt buộc, không được bỏ trống!",
+                    },
+                  ]}
+                >
+                  <Select options={listLoaiMau} placeholder="Nhập dữ liệu" />
                 </Form.Item>
               </Col>
               <Col span={12}>
+                <Form.Item
+                  label="Tên"
+                  required
+                  name="lastName"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Trường bắt buộc, không được bỏ trống!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Nhập tên của bệnh nhân" />
+                </Form.Item>
                 <Form.Item
                   label="Giới tính"
                   required
@@ -414,7 +586,7 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập giới tính" />
+                  <Select options={listGender} placeholder="Nhập dữ liệu" />
                 </Form.Item>
                 <Form.Item
                   label="Tần số tim tối đa"
@@ -440,7 +612,10 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập thông số" />
+                  <Select
+                    options={listDauThatnguc}
+                    placeholder="Nhập dữ liệu"
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Giá trị giảm ST"
@@ -466,25 +641,12 @@ export default function Index() {
                     },
                   ]}
                 >
-                  <Input placeholder="Nhập thông số" />
+                  <Select options={listDoDoc} placeholder="Nhập dữ liệu" />
                 </Form.Item>
                 <Form.Item
                   label="Số lượng các mạch chính"
                   required
                   name="ca"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Trường bắt buộc, không được bỏ trống!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="Nhập thông số" />
-                </Form.Item>
-                <Form.Item
-                  label="Loại bệnh tim"
-                  required
-                  name="thal"
                   rules={[
                     {
                       required: true,
@@ -523,7 +685,7 @@ export default function Index() {
       </Modal>
 
       <div className="header">
-        <div className="add-button" onClick={showModal}>
+        <div className="add-button" onClick={() => showModal("create")}>
           Thêm mới
         </div>
       </div>
@@ -531,6 +693,8 @@ export default function Index() {
         {" "}
         {"<"} Trở lại
       </div>
+
+      <ToastContainer />
     </div>
   );
 }

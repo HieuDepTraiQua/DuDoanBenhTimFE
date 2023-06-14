@@ -39,20 +39,21 @@
     height: 860px;
     align-items: center;
     .table-data {
-      width: 1400px;
+      width: 1450px;
       background-color: white;
       padding: 10px;
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
       border-radius: 5px;
+      text-align: end;
     }
   }
   .header {
     position: absolute;
     display: flex;
-    width: 1200;
+    width: 1200px;
     justify-content: flex-end;
-    width: 1360px;
-    height: 152px;
+    width: 1485px;
+    height: 120px;
     align-items: flex-end;
     .add-button {
         color: white;
@@ -73,3 +74,7 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  .button-action{
+    cursor: pointer;
+}
